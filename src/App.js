@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { connect } from 'react-redux';
+import withErrorHandler from './hocs/withErrorHandler';
+import LoadingPage from './components/LoadingPage';
+import LoadingRequest from './components/LoadingRequest';
+import ListBeacons from './pages/beacons/listBeacons';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <pre>{process.env.REACT_APP_BE_HOST}</pre>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <React.Fragment>
+        <LoadingRequest isShow={this.props.loading} />
+        <LoadingPage isShow={this.props.isShowLoadingPage} />
+        <ListBeacons></ListBeacons>
+      </React.Fragment>
+    );
+  }
 }
+const mapStateToProps = (state) => {
+  return {
+    loading: state.ui.loading,
+    isShowLoadingPage: state.ui.isShowLoadingPage,
+    isRenderPages: state.ui.isRenderPages
+  };
+};
 
-export default App;
+export default connect(mapStateToProps)(withErrorHandler(App));
